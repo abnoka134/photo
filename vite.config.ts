@@ -6,4 +6,10 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 export default defineConfig({
   plugins: [react()],
     base: process.env.VITE_BASE_PATH || "/photo",
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@tests": path.resolve(__dirname, "./tests")
+    }
+  }
 });
