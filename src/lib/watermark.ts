@@ -135,10 +135,10 @@ export async function applyWatermark(
 
   const padding = 40 * scaleFactor;
 
-  const timeFontSize = Math.round(100 * scaleFactor);
-  const dateFontSize = Math.round(28 * scaleFactor);
-  const dayFontSize = Math.round(28 * scaleFactor);
-  const locationFontSize = Math.round(28 * scaleFactor);
+  const timeFontSize = Math.round(110 * scaleFactor);
+  const dateFontSize = Math.round(32 * scaleFactor);
+  const dayFontSize = Math.round(32 * scaleFactor);
+  const locationFontSize = Math.round(32 * scaleFactor);
 
   ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
   const timeWidth = ctx.measureText(watermarkData.time).width;
@@ -218,8 +218,8 @@ export async function applyWatermark(
   drawCondensedText(ctx, watermarkData.location, boxX, locationY, 0.85);
 
   // Bottom right Timemark branding
-  const brandFontSize = Math.round(26 * scaleFactor);
-  const subTextFontSize = Math.round(16 * scaleFactor);
+  const brandFontSize = Math.round(30 * scaleFactor);
+  const subTextFontSize = Math.round(20 * scaleFactor);
 
   ctx.font = `500 ${brandFontSize}px 'RobotoMedium', sans-serif`;
   const timeText = "Time";
