@@ -1,6 +1,7 @@
 import Pica from "pica";
 import JSZip from "jszip";
 import type { WatermarkData } from "@/components/WatermarkForm";
+import logoPath from "@assets/logo_1764528864504.png";
 
 const pica = new Pica();
 
@@ -108,6 +109,19 @@ export async function applyWatermark(
   }
   await new Promise((resolve) => setTimeout(resolve, 100));
 
+  // Load logo image
+  let logoImg: HTMLImageElement | null = null;
+  try {
+    logoImg = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = logoPath;
+    });
+  } catch {
+    // Logo loading failed, continue without it
+  }
+
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d")!;
 
@@ -121,10 +135,10 @@ export async function applyWatermark(
 
   const padding = 40 * scaleFactor;
 
-  const timeFontSize = Math.round(90 * scaleFactor);
-  const dateFontSize = Math.round(24 * scaleFactor);
-  const dayFontSize = Math.round(24 * scaleFactor);
-  const locationFontSize = Math.round(26 * scaleFactor);
+  const timeFontSize = Math.round(100 * scaleFactor);
+  const dateFontSize = Math.round(28 * scaleFactor);
+  const dayFontSize = Math.round(28 * scaleFactor);
+  const locationFontSize = Math.round(28 * scaleFactor);
 
   ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
   const timeWidth = ctx.measureText(watermarkData.time).width;
@@ -160,7 +174,16 @@ export async function applyWatermark(
   ctx.textAlign = "left";
 
   const timeX = boxX;
-  const timeY = boxY + timeFontSize / 2;
+  const timeY = boxY + timeFontSize ;
+
+  // Draw logo above time if loaded
+  if (logoImg) {
+    const logoHeight = timeFontSize * 0.9;
+    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+    const logoX = timeX;
+    const logoY = boxY - logoHeight + 15 * scaleFactor;
+    ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
+  }
 
   ctx.fillStyle = "white";
   ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
@@ -194,44 +217,6 @@ export async function applyWatermark(
   ctx.fillStyle = "white";
   drawCondensedText(ctx, watermarkData.location, boxX, locationY, 0.85);
 
-  // Bottom left CBKT branding
-  const cbktFontSize = Math.round(26 * scaleFactor);
-  ctx.font = `100 ${cbktFontSize}px 'Roboto Condensed', sans-serif`;
-  
-  // Measure text width
-  const cbktText = "CBKT: NGUYỄN QUANG VINH";
-  const cbktTextWidth = ctx.measureText(cbktText).width;
-  const boxPadding = 36 * scaleFactor;
-  const boxRadius = 4 * scaleFactor;
-  
-  // Draw semi-transparent background box with fade gradient
-  ctx.textBaseline = "bottom";
-  const cbktBoxHeight = cbktFontSize + boxPadding;
-  const boxTop = image.height - padding - cbktBoxHeight / 2 - cbktFontSize / 2;
-  const boxLeft = padding - boxPadding + 24 * scaleFactor;
-  const boxRight = boxLeft + cbktTextWidth + boxPadding * 2;
-  
-  const gradient = ctx.createLinearGradient(boxLeft, 0, boxRight, 0);
-  gradient.addColorStop(0, "rgba(0, 0, 0, 0.09)");
-  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-  ctx.fillStyle = gradient;
-  
-  roundRect(
-    ctx,
-    boxLeft,
-    boxTop,
-    cbktTextWidth + boxPadding * 2,
-    cbktBoxHeight,
-    boxRadius
-  );
-  ctx.fill();
-  
-  // Draw text
-  ctx.fillStyle = "white";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "bottom";
-  ctx.fillText(cbktText, padding, image.height - padding);
-
   // Bottom right Timemark branding
   const brandFontSize = Math.round(26 * scaleFactor);
   const subTextFontSize = Math.round(16 * scaleFactor);
@@ -255,10 +240,9 @@ export async function applyWatermark(
   ctx.fillText(markText, brandStartX + timeTextWidth, brandY);
 
   // Draw 100% Chân thực below
-  ctx.font = `100 ${subTextFontSize}px 'Roboto'`;
+  ctx.font = `100 ${subTextFontSize}px 'Roboto Condensed', sans-serif`;
   ctx.textAlign = "right";
   ctx.fillStyle = "white";
-  ctx.letterSpacing = "-0.07em"
   drawCondensedText(
     ctx,
     "100% Chân thực",
