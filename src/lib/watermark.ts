@@ -135,10 +135,10 @@ export async function applyWatermark(
 
   const padding = 40 * scaleFactor;
 
-  const timeFontSize = Math.round(110 * scaleFactor);
-  const dateFontSize = Math.round(32 * scaleFactor);
-  const dayFontSize = Math.round(32 * scaleFactor);
-  const locationFontSize = Math.round(32 * scaleFactor);
+  const timeFontSize = Math.round(130 * scaleFactor);
+  const dateFontSize = Math.round(40 * scaleFactor);
+  const dayFontSize = Math.round(40 * scaleFactor);
+  const locationFontSize = Math.round(40 * scaleFactor);
 
   ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
   const timeWidth = ctx.measureText(watermarkData.time).width;
