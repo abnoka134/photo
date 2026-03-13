@@ -176,9 +176,17 @@ export async function applyWatermark(
   const timeX = boxX;
   const timeY = boxY + timeFontSize / 2;
 
-  ctx.fillStyle = "white";
   ctx.font = `700 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+  ctx.shadowBlur = 5 * scaleFactor;
+  ctx.shadowOffsetX = 0 * scaleFactor;
+  ctx.shadowOffsetY = 0 * scaleFactor;
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2 * scaleFactor;
+  ctx.strokeText(watermarkData.time, timeX, timeY);
+  ctx.fillStyle = "white";
   ctx.fillText(watermarkData.time, timeX, timeY);
+  ctx.shadowColor = "transparent";
 
   const dividerX = timeX + timeWidth + dividerMargin;
   const dividerHeight = timeFontSize * 0.85;
@@ -192,7 +200,7 @@ export async function applyWatermark(
   ctx.fillStyle = "white";
   ctx.font = `${dateFontSize}px 'Roboto', sans-serif`;
   drawCondensedText(ctx, dateText, rightX, dividerY + dateFontSize / 2, 0.85);
-
+  
   ctx.font = `${dayFontSize}px 'Roboto', sans-serif`;
   drawCondensedText(
     ctx,
@@ -205,9 +213,8 @@ export async function applyWatermark(
   const locationY = image.height - padding - Math.round(20 * scaleFactor) - 8 * scaleFactor;
     //timeY + timeFontSize / 2 + 30 * scaleFactor + locationFontSize / 2;
   ctx.font = `${locationFontSize}px 'Roboto', sans-serif`;
-  ctx.fillStyle = "white";
   drawCondensedText(ctx, watermarkData.location, boxX, locationY, 0.85);
-
+  
   // Bottom right Timemark branding
   const brandFontSize = Math.round(30 * scaleFactor);
   const subTextFontSize = Math.round(20 * scaleFactor);
