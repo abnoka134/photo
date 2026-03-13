@@ -135,12 +135,12 @@ export async function applyWatermark(
 
   const padding = 40 * scaleFactor;
 
-  const timeFontSize = Math.round(130 * scaleFactor);
-  const dateFontSize = Math.round(40 * scaleFactor);
-  const dayFontSize = Math.round(40 * scaleFactor);
-  const locationFontSize = Math.round(40 * scaleFactor);
+  const timeFontSize = Math.round(134 * scaleFactor);
+  const dateFontSize = Math.round(44 * scaleFactor);
+  const dayFontSize = Math.round(44 * scaleFactor);
+  const locationFontSize = Math.round(44 * scaleFactor);
 
-  ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
+  ctx.font = `700 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
   const timeWidth = ctx.measureText(watermarkData.time).width;
 
   ctx.font = `${dateFontSize}px 'Roboto', sans-serif`;
@@ -168,25 +168,16 @@ export async function applyWatermark(
 
   const boxX = padding;
   const boxY =
-    image.height - padding - timeFontSize - locationFontSize - 70 * scaleFactor;
+    image.height - padding - timeFontSize - locationFontSize - 10 * scaleFactor;
 
   ctx.textBaseline = "middle";
   ctx.textAlign = "left";
 
   const timeX = boxX;
-  const timeY = boxY + timeFontSize ;
-
-  // Draw logo above time if loaded
-  if (logoImg) {
-    const logoHeight = timeFontSize * 0.9;
-    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
-    const logoX = timeX;
-    const logoY = boxY - logoHeight + 15 * scaleFactor;
-    ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
-  }
+  const timeY = boxY + timeFontSize / 2;
 
   ctx.fillStyle = "white";
-  ctx.font = `500 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
+  ctx.font = `700 ${timeFontSize}px 'Big Shoulders Display', sans-serif`;
   ctx.fillText(watermarkData.time, timeX, timeY);
 
   const dividerX = timeX + timeWidth + dividerMargin;
@@ -211,8 +202,8 @@ export async function applyWatermark(
     0.85,
   );
 
-  const locationY =
-    timeY + timeFontSize / 2 + 15 * scaleFactor + locationFontSize / 2;
+  const locationY = image.height - padding - Math.round(20 * scaleFactor) - 8 * scaleFactor;
+    //timeY + timeFontSize / 2 + 30 * scaleFactor + locationFontSize / 2;
   ctx.font = `${locationFontSize}px 'Roboto', sans-serif`;
   ctx.fillStyle = "white";
   drawCondensedText(ctx, watermarkData.location, boxX, locationY, 0.85);
